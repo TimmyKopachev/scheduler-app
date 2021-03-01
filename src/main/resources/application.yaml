@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: scheduler-service
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: info,health,beans
+
+org:
+  quartz:
+    scheduler:
+      instanceName: InstagramBotScheduler
+    threadPool:
+      threadCount: 3
+    jobStore:
+      class: org.quartz.simpl.RAMJobStore
