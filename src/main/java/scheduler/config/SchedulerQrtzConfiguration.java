@@ -1,13 +1,13 @@
 package scheduler.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobDetail;
-import org.quartz.Scheduler;
 import org.quartz.Trigger;
-import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +20,11 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import scheduler.service.LogSchedulerService;
 
-
+@Slf4j
 @Configuration
 @EnableScheduling
-@PropertySource({"classpath:scheduler.properties"})
+@PropertySource("classpath:scheduler.properties")
+@ConditionalOnExpression(value = "${scheduler.enable:true}")
 public class SchedulerQrtzConfiguration {
 
     @Value("${quartz.cron.expression}")
@@ -57,6 +58,7 @@ public class SchedulerQrtzConfiguration {
 
     @Bean(name = "logJob")
     public JobDetailFactoryBean logJob() {
+        log.info("Init Log job");
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
         factoryBean.setName("LogSchedulerJob");
         factoryBean.setDescription("Invoke Log Scheduler Job...");
@@ -67,6 +69,7 @@ public class SchedulerQrtzConfiguration {
 
     @Bean
     public CronTriggerFactoryBean logTrigger(JobDetail logJob) {
+        log.info("Init Log trigger");
         CronTriggerFactoryBean factoryBean = new CronTriggerFactoryBean();
         factoryBean.setName("LogCronTrigger");
         factoryBean.setJobDetail(logJob);
@@ -86,6 +89,4 @@ public class SchedulerQrtzConfiguration {
         schedulerFactory.setJobFactory(springBeanJobFactory);
         return schedulerFactory;
     }
-
-
 }

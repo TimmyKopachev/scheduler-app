@@ -1,24 +1,19 @@
 package scheduler.service;
 
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.SchedulerContext;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.springframework.stereotype.Component;
 
-public class DateExecutorService implements Job {
+@Slf4j
+@Component
+@AllArgsConstructor
+public class DateExecutorService {
 
-    @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        JobDataMap mergedJobDataMap = jobExecutionContext.getMergedJobDataMap();
+    private final Scheduler scheduler;
 
-        SchedulerContext context = null;
-        try {
-            context = jobExecutionContext.getScheduler().getContext();
-        } catch (SchedulerException e) {
-            throw new JobExecutionException("Error obtaining scheduler context.", e, false);
-        }
-
+    public void scheduleTask() throws SchedulerException {
+        
     }
 }
